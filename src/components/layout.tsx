@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -10,12 +10,6 @@ import {
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import LogoSvg from "../../assets/images/logo.svg";
 import md5 from "md5";
-
-const navigation = [
-  { name: "Dashboard", href: "/home", icon: HomeIcon, current: true },
-  { name: "Teams", href: "/teams", icon: UsersIcon, current: false },
-  { name: "Users", href: "/users", icon: FolderIcon, current: false },
-];
 
 const userNavigation = [
   { name: "Your profile", href: "#" },
@@ -38,6 +32,34 @@ export function DashboardLayout({ tabs, tabTitle, children }: SidebarProps) {
   const userAvatar = `https://www.gravatar.com/avatar/${md5(
     userEmail
   )}?d=identicon`;
+  const [activePath, setActivePath] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setActivePath(window.location.pathname);
+    }
+  }, []);
+
+  const navigation = [
+    {
+      name: "Dashboard",
+      href: "/home",
+      icon: HomeIcon,
+      current: activePath === "/home",
+    },
+    {
+      name: "Users",
+      href: "/users",
+      icon: UsersIcon,
+      current: activePath === "/users",
+    },
+    {
+      name: "Issues",
+      href: "/issues",
+      icon: FolderIcon,
+      current: activePath === "/issues",
+    },
+  ];
 
   return (
     <>
