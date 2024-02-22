@@ -18,5 +18,6 @@ module.exports = (webpackConfigEnv, argv) => {
         },
       ],
     },
+    externals: ["@myorg/authn"],
   });
 };

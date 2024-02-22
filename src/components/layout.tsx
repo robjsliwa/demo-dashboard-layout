@@ -10,10 +10,32 @@ import {
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import LogoSvg from "../../assets/images/logo.svg";
 import md5 from "md5";
+// @ts-ignore
+import { logout } from "@myorg/authn";
 
-const userNavigation = [
+const onLogout = async (event: React.MouseEvent<HTMLButtonElement>) => {
+  event.preventDefault();
+  try {
+    await logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
+    });
+  } catch (error) {
+    console.error("Logout failed:", error);
+    // Handle any errors that occur during logout
+  }
+};
+
+interface NavigationItem {
+  name: string;
+  href?: string;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+const userNavigation: NavigationItem[] = [
   { name: "Your profile", href: "#" },
-  { name: "Sign out", href: "/api/auth/logout" },
+  { name: "Sign out", onClick: onLogout },
 ];
 
 function classNames(...classes: any[]) {
@@ -279,15 +301,24 @@ export function DashboardLayout({ tabs, tabTitle, children }: SidebarProps) {
                       {userNavigation.map((item) => (
                         <Menu.Item key={item.name}>
                           {({ active }) => (
-                            <a
-                              href={item.href}
+                            <button
+                              onClick={(event) => item.onClick?.(event)} // Pass the event to the onClick handler
                               className={classNames(
                                 active ? "bg-gray-50" : "",
                                 "block px-3 py-1 text-sm leading-6 text-gray-900"
                               )}
                             >
-                              {item.name}
-                            </a>
+                              {item.href ? (
+                                <a
+                                  href={item.href}
+                                  className="block w-full h-full"
+                                >
+                                  {item.name}
+                                </a>
+                              ) : (
+                                item.name
+                              )}
+                            </button>
                           )}
                         </Menu.Item>
                       ))}
