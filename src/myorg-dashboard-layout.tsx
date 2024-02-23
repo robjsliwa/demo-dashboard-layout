@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import singleSpaReact from "single-spa-react";
 import Root from "./root.component";
-export { DashboardLayout } from "./components/layout";
+export { useDashboard } from "./dashboard-context";
 
 const lifecycles = singleSpaReact({
   React,

@@ -10,8 +10,10 @@ import {
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import LogoSvg from "../../assets/images/logo.svg";
 import md5 from "md5";
+import { Link } from "react-router-dom";
 // @ts-ignore
 import { logout } from "@myorg/authn";
+import { useDashboard } from "../dashboard-context";
 
 const onLogout = async (event: React.MouseEvent<HTMLButtonElement>) => {
   event.preventDefault();
@@ -43,18 +45,19 @@ function classNames(...classes: any[]) {
 }
 
 interface SidebarProps {
-  tabs: { name: string; href: string; current: boolean }[];
-  tabTitle: string;
+  // tabs: { name: string; href: string; current: boolean }[];
+  // tabTitle: string;
   children: React.ReactNode;
 }
 
-export function DashboardLayout({ tabs, tabTitle, children }: SidebarProps) {
+export function DashboardLayout({ children }: SidebarProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const userEmail = "toby.plum@example.com";
   const userAvatar = `https://www.gravatar.com/avatar/${md5(
     userEmail
   )}?d=identicon`;
   const [activePath, setActivePath] = useState("");
+  const { tabs, tabTitle } = useDashboard();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -152,7 +155,9 @@ export function DashboardLayout({ tabs, tabTitle, children }: SidebarProps) {
                           <ul role="list" className="-mx-2 space-y-1">
                             {navigation.map((item) => (
                               <li key={item.name}>
-                                <div
+                                <Link
+                                  to={item.href}
+                                  onClick={() => setActivePath(item.href)}
                                   className={classNames(
                                     item.current
                                       ? "bg-gray-800 text-white"
@@ -160,13 +165,12 @@ export function DashboardLayout({ tabs, tabTitle, children }: SidebarProps) {
                                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                                   )}
                                 >
-                                  <a href={item.href} />
                                   <item.icon
                                     className="h-6 w-6 shrink-0"
                                     aria-hidden="true"
                                   />
                                   {item.name}
-                                </div>
+                                </Link>
                               </li>
                             ))}
                           </ul>
@@ -195,8 +199,9 @@ export function DashboardLayout({ tabs, tabTitle, children }: SidebarProps) {
                   <ul role="list" className="-mx-2 space-y-1">
                     {navigation.map((item) => (
                       <li key={item.name}>
-                        <a
-                          href={item.href}
+                        <Link
+                          to={item.href}
+                          onClick={() => setActivePath(item.href)}
                           className={classNames(
                             item.current
                               ? "bg-gray-800 text-white"
@@ -209,7 +214,7 @@ export function DashboardLayout({ tabs, tabTitle, children }: SidebarProps) {
                             aria-hidden="true"
                           />
                           {item.name}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -244,9 +249,9 @@ export function DashboardLayout({ tabs, tabTitle, children }: SidebarProps) {
                   <div className="mt-4 sm:ml-10 sm:mt-0">
                     <nav className="-mb-px flex space-x-8">
                       {tabs.map((tab) => (
-                        <a
+                        <Link
                           key={tab.name}
-                          href={tab.href}
+                          to={tab.href}
                           className={classNames(
                             tab.current
                               ? "border-indigo-500 text-indigo-600"
@@ -256,7 +261,7 @@ export function DashboardLayout({ tabs, tabTitle, children }: SidebarProps) {
                           aria-current={tab.current ? "page" : undefined}
                         >
                           {tab.name}
-                        </a>
+                        </Link>
                       ))}
                     </nav>
                   </div>
