@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 // @ts-ignore
 import { logout } from "@myorg/authn";
 import { useDashboard } from "../dashboard-context";
+import { Outlet } from "react-router-dom";
 
 const onLogout = async (event: React.MouseEvent<HTMLButtonElement>) => {
   event.preventDefault();
@@ -44,13 +45,14 @@ function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-interface SidebarProps {
-  // tabs: { name: string; href: string; current: boolean }[];
-  // tabTitle: string;
-  children: React.ReactNode;
-}
+// interface SidebarProps {
+//   // tabs: { name: string; href: string; current: boolean }[];
+//   // tabTitle: string;
+//   children: React.ReactNode;
+// }
 
-export function DashboardLayout({ children }: SidebarProps) {
+// export function DashboardLayout({ children }: SidebarProps) {
+export function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const userEmail = "toby.plum@example.com";
   const userAvatar = `https://www.gravatar.com/avatar/${md5(
@@ -335,7 +337,10 @@ export function DashboardLayout({ children }: SidebarProps) {
           </div>
 
           <main className="py-10">
-            <div className="px-4 sm:px-6 lg:px-8">{children}</div>
+            <div className="px-4 sm:px-6 lg:px-8">
+              <Outlet />
+              {/* {children} */}
+            </div>
           </main>
         </div>
       </div>

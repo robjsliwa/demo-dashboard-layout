@@ -2,6 +2,7 @@ import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DashboardLayout } from "./components/layout";
 import { DashboardProvider } from "./dashboard-context";
+import PrivateRoute from "./private-route";
 // @ts-ignore
 import { Home } from "@myorg/home-page";
 // @ts-ignore
@@ -17,13 +18,37 @@ export default function Root(props) {
   return (
     <DashboardProvider>
       <BrowserRouter>
-        <DashboardLayout>
-          <Routes>
-            <Route path="/home" element={<Home />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/issues/*" element={<Issues />} />
-          </Routes>
-        </DashboardLayout>
+        {/* <DashboardLayout> */}
+        <Routes>
+          <Route path="/" element={<DashboardLayout />}>
+            <Route
+              path="home"
+              element={
+                <PrivateRoute>
+                  <Home />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="users"
+              element={
+                <PrivateRoute>
+                  <Users />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="issues/*"
+              element={
+                <PrivateRoute>
+                  <Issues />
+                </PrivateRoute>
+              }
+            />
+          </Route>
+          <Route path="*" element={<div>Not Found</div>} />
+        </Routes>
+        {/* </DashboardLayout> */}
       </BrowserRouter>
     </DashboardProvider>
   );
